@@ -27,12 +27,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
 	FVector TargetPosition;      // Target position = position of the cube to reach
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
 	FVector RobotPosition;
+
+	UPROPERTY(BluePrintReadWrite, EditAnywhere, Category = "Control")
+	FVector NewPos;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
 	float kp;					// Proportional gain for the P-Controller
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
-	void FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
+	FVector FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
 
 };
