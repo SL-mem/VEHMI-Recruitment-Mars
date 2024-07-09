@@ -1,4 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+// header file, "declare" all the functions and variables there
 
 #pragma once
 
@@ -23,6 +24,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Actor;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
+	FVector TargetPosition;      // Target position = position of the cube to reach
+
+	FVector RobotPosition;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
+	float kp;					// Proportional gain for the P-Controller
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	void FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
+
 };
