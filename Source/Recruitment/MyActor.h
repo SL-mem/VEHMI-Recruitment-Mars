@@ -33,6 +33,6 @@ public:
 	float kp;					// Proportional gain for the P-Controller
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
-	void FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
+	FVector FollowTarget(float DeltaTime, FVector target, FVector robot_pos);   // function that will be created to implement the controller and to follow the target
 
 };

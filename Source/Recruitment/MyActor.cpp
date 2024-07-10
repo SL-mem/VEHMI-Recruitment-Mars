@@ -25,16 +25,20 @@ void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FollowTarget(DeltaTime);
+	//FollowTarget(DeltaTime);
 }
 
 
-void AMyActor::FollowTarget(float DeltaTime)
+FVector AMyActor::FollowTarget(float DeltaTime, FVector target, FVector robot_pos)
 {
-	RobotPosition = GetActorLocation();
-	FVector Err = TargetPosition - RobotPosition;
+	//RobotPosition = GetActorLocation();
+	//FVector Err = TargetPosition - RobotPosition;
+	FVector Err = target - robot_pos;
 
 	FVector PositionCorrection = kp * Err;
 
-	SetActorLocation( RobotPosition + PositionCorrection );
+	//SetActorLocation( RobotPosition + PositionCorrection );
+	FVector newpos = robot_pos + PositionCorrection * DeltaTime;
+
+	return newpos;
 }
