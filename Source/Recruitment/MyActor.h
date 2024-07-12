@@ -30,11 +30,11 @@ public:
 	FVector RobotPosition;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
-	float kp;					// Proportional gain for the P-Controller
+	float k_p;					// Proportional gain for the P-Controller
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
 	FVector FollowTarget(float DeltaTime, FVector target, FVector robot_pos);   // function that will be created to implement the controller and to follow the target
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
-	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float distance_threshold);
+	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value);
 };

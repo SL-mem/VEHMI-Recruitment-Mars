@@ -10,7 +10,7 @@ AMyActor::AMyActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TargetPosition = FVector(0.0, 0.0, 0.0);      // Initialisation of the variable, need to assign the position of the cube
-	kp = 100;
+	k_p = 100;
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +35,7 @@ FVector AMyActor::FollowTarget(float DeltaTime, FVector target, FVector robot_po
 	//FVector Err = TargetPosition - RobotPosition;
 	FVector Err = target - robot_pos;
 
-	FVector PositionCorrection = kp * Err;
+	FVector PositionCorrection = k_p * Err;
 
 	//SetActorLocation( RobotPosition + PositionCorrection );
 	FVector newpos = target;
@@ -43,7 +43,7 @@ FVector AMyActor::FollowTarget(float DeltaTime, FVector target, FVector robot_po
 	return newpos;
 }
 
-float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float distance_threshold)
+float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
 {
 	float Error = target - robot_pos;
 
@@ -55,7 +55,7 @@ float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float 
 
 	//float thrust_force = base_value + kp * velocity_error;
 
-	float thrust_force = 1000 + kp * velocity_error;
+	float thrust_force = base_value + kp * velocity_error;
 	//if ((Error == distance_threshold && Error > 0) or ((-Error == distance_threshold && Error < 0)))
 	//{
 		//float ScaleFactor = Error / distance_threshold;
