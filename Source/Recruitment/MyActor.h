@@ -15,6 +15,8 @@ class RECRUITMENT_API AMyActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMyActor();
+	float AccumulatedTime=0.0f;
+	TArray<float> ErrValues;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
 	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value);
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float Communication_delay(float DeltaTime, float err);
 };

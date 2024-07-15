@@ -9,7 +9,7 @@ AMyActor::AMyActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	TargetPosition = FVector(0.0, 0.0, 0.0);      // Initialisation of the variable, need to assign the position of the cube
+	//TargetPosition = FVector(0.0, 0.0, 0.0);      // Initialisation of the variable, need to assign the position of the cube
 	k_p = 100;
 }
 
@@ -17,7 +17,7 @@ AMyActor::AMyActor()
 void AMyActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -25,6 +25,7 @@ void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Communication_delay(DeltaTime);
 	//FollowTarget(DeltaTime);
 }
 
@@ -47,22 +48,63 @@ float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float 
 {
 	float Error = target - robot_pos;
 
-	float desired_velocity = Error;
+	float stored_error = Communication_delay(DeltaTime, Error);
+
+	/*for (0.0; 3.0; DeltaTime) 
+	{
+		float desired_velocity = stored_error[i];
+
+		float velocity_error = desired_velocity - current_velocity;
+
+		float thrust_force = base_value + kp * velocity_error;
+	}*/
+	
+	float desired_velocity = stored_error;
 
 	float velocity_error = desired_velocity - current_velocity;
 
-	//float thrust_force = kp * desired_velocity;
-
-	//float thrust_force = base_value + kp * velocity_error;
-
 	float thrust_force = base_value + kp * velocity_error;
-	//if ((Error == distance_threshold && Error > 0) or ((-Error == distance_threshold && Error < 0)))
-	//{
-		//float ScaleFactor = Error / distance_threshold;
-		//thrust_force *= ScaleFactor;
-		//thrust_force = -50 * thrust_force;
-	//}
-
 
 	return thrust_force;
+}
+
+
+float AMyActor::Communication_delay(float DeltaTime, float err)
+{
+	float StoredErrValue = 0.0;
+
+	//ErrValues.Add(err);
+
+	//AccumulatedTime += DeltaTime;
+
+
+	if (AccumulatedTime < 3.0)
+	{
+		ErrValues.Add(err);
+		AccumulatedTime += DeltaTime;
+
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("size: %s"), *FString::SanitizeFloat(ErrValues[0])));
+
+	}
+	if (AccumulatedTime >= 3.0)
+	{
+		//StoredErrValue = 500;
+
+		//size = sizeof(ErrValues);
+
+		for (int j=0; j < sizeof(ErrValues) - 1; j++)
+		{
+			ErrValues[j] = ErrValues[j + 1];
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("size: %s"), *FString::SanitizeFloat(sizeof(ErrValues))));
+		// When printed, size = 16.0 during whole simulation
+
+		ErrValues.Add(err);
+
+		StoredErrValue = ErrValues[0];
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("StoredErrValue: %s"), *FString::SanitizeFloat(StoredErrValue)));
+	return StoredErrValue;
+	//return ErrValues;
 }
