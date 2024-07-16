@@ -42,4 +42,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
 	float Communication_delay(float DeltaTime, float err, float initial_pos);
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float CalculateAngleForXTranslation(float targetX, float robot_posX, float current_velocityX);
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float CalculateAngleForYTranslation(float targetY, float robot_posY, float current_velocityY);
 };
