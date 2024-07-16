@@ -41,5 +41,5 @@ public:
 	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value);
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
-	float Communication_delay(float DeltaTime, float err);
+	float Communication_delay(float DeltaTime, float err, float initial_pos);
 };

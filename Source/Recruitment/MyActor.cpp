@@ -2,6 +2,8 @@
 
 
 #include "MyActor.h"
+#include <AssetRegistry/AssetDataTagMapSerializationDetails.h>
+#include <Engine/RendererSettings.h>
 
 // Sets default values
 AMyActor::AMyActor()
@@ -46,20 +48,9 @@ FVector AMyActor::FollowTarget(float DeltaTime, FVector target, FVector robot_po
 
 float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
 {
-	float Error = target - robot_pos;
+	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
 
-	float stored_error = Communication_delay(DeltaTime, Error);
-
-	/*for (0.0; 3.0; DeltaTime) 
-	{
-		float desired_velocity = stored_error[i];
-
-		float velocity_error = desired_velocity - current_velocity;
-
-		float thrust_force = base_value + kp * velocity_error;
-	}*/
-	
-	float desired_velocity = stored_error;
+	float desired_velocity = Error;
 
 	float velocity_error = desired_velocity - current_velocity;
 
@@ -69,42 +60,29 @@ float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float 
 }
 
 
-float AMyActor::Communication_delay(float DeltaTime, float err)
+float AMyActor::Communication_delay(float DeltaTime, float err, float initial_pos)
 {
-	float StoredErrValue = 0.0;
+	float StoredErrValue = initial_pos;
 
-	//ErrValues.Add(err);
+	ErrValues.Add(err);
 
-	//AccumulatedTime += DeltaTime;
+	AccumulatedTime += DeltaTime;
 
-
-	if (AccumulatedTime < 3.0)
+	if (GEngine)
 	{
-		ErrValues.Add(err);
-		AccumulatedTime += DeltaTime;
-
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("size: %s"), *FString::SanitizeFloat(ErrValues[0])));
-
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Array Size: %d"), ErrValues.Num()));
 	}
-	if (AccumulatedTime >= 3.0)
+
+	if (AccumulatedTime >= 3.0f)
 	{
-		//StoredErrValue = 500;
-
-		//size = sizeof(ErrValues);
-
-		for (int j=0; j < sizeof(ErrValues) - 1; j++)
+		if (ErrValues.Num() > 0)
 		{
-			ErrValues[j] = ErrValues[j + 1];
+			StoredErrValue = ErrValues[0];
+
+			ErrValues.RemoveAt(0);
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("size: %s"), *FString::SanitizeFloat(sizeof(ErrValues))));
-		// When printed, size = 16.0 during whole simulation
-
-		ErrValues.Add(err);
-
-		StoredErrValue = ErrValues[0];
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("StoredErrValue: %s"), *FString::SanitizeFloat(StoredErrValue)));
 	return StoredErrValue;
-	//return ErrValues;
 }
