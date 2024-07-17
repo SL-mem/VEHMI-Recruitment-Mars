@@ -9,7 +9,6 @@
 AMyActor::AMyActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	k_p = 100;
 }
 
 void AMyActor::BeginPlay()
@@ -24,20 +23,10 @@ void AMyActor::Tick(float DeltaTime)
 }
 
 
-FVector AMyActor::FollowTarget(float DeltaTime, FVector target, FVector robot_pos)
-{
-	FVector Err = target - robot_pos;
-
-	FVector PositionCorrection = k_p * Err;
-
-	FVector newpos = target;
-
-	return newpos;
-}
-
 float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
 {
 	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
+	//float Error = target - robot_pos;
 
 	float desired_velocity = Error;
 
@@ -49,15 +38,16 @@ float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float 
 }
 
 
-float AMyActor::CalculateAngleForXTranslation(float targetX, float robot_posX, float current_velocityX)
+float AMyActor::CalculateAngleForXTranslation(float DeltaTime, float targetX, float robot_posX, float current_velocityX)
 {
-	float errorX = targetX - robot_posX;
+	//float errorX = targetX - robot_posX;
+	float errorX = Communication_delay(DeltaTime, targetX, robot_posX) - robot_posX;
 	//float errorZ = targetZ - robot_posZ;
 	//float theta_y = atan2(errorX, errorZ) * 180/PI;
 
 	//return theta_y;
 
-	float kp_orient = 0.5;
+	float kp_orient = 1.0;
 	float base_orient = 0;
 
 	float desired_velocityX = errorX;
@@ -70,15 +60,16 @@ float AMyActor::CalculateAngleForXTranslation(float targetX, float robot_posX, f
 }
 
 
-float AMyActor::CalculateAngleForYTranslation(float targetY, float robot_posY, float current_velocityY)
+float AMyActor::CalculateAngleForYTranslation(float DeltaTime, float targetY, float robot_posY, float current_velocityY)
 {
-	float errorY = targetY - robot_posY;
+	//float errorY = targetY - robot_posY;
+	float errorY = Communication_delay(DeltaTime, targetY, robot_posY) - robot_posY;
 	//float errorZ = targetZ - robot_posZ;
 	//float theta_y = atan2(errorX, errorZ) * 180/PI;
 
 	//return theta_y;
 
-	float kp_orient = 0.5;
+	float kp_orient = 1.0;
 	float base_orient = 0;
 
 	float desired_velocityY = errorY;
@@ -90,11 +81,11 @@ float AMyActor::CalculateAngleForYTranslation(float targetY, float robot_posY, f
 	return angleX;
 }
 
-float AMyActor::Communication_delay(float DeltaTime, float err, float initial_pos)
+float AMyActor::Communication_delay(float DeltaTime, float target_pos, float initial_pos)
 {
-	float StoredErrValue = initial_pos;
+	float StoredTargetValue = initial_pos;
 
-	ErrValues.Add(err);
+	TargetValues.Add(target_pos);
 
 	AccumulatedTime += DeltaTime;
 
@@ -103,16 +94,16 @@ float AMyActor::Communication_delay(float DeltaTime, float err, float initial_po
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Array Size: %d"), ErrValues.Num()));
 	}*/
 
-	if (AccumulatedTime >= 3.0f)
+	if (AccumulatedTime >= 6.0f)
 	{
-		if (ErrValues.Num() > 0)
+		if (TargetValues.Num() > 0)
 		{
-			StoredErrValue = ErrValues[0];
+			StoredTargetValue = TargetValues[0];
 
-			ErrValues.RemoveAt(0);
+			TargetValues.RemoveAt(0);
 		}
 	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("StoredErrValue: %s"), *FString::SanitizeFloat(StoredErrValue)));
-	return StoredErrValue;
+	return StoredTargetValue;
 }
