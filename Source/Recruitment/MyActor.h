@@ -31,10 +31,11 @@ public:
 
 	FVector RobotPosition;
 
-
+	float PreviousError;
+	float Integral;
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
-	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value);
+	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float ki, float kd, float base_value);
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
 	float Communication_delay(float DeltaTime, float target_pos, float initial_pos);

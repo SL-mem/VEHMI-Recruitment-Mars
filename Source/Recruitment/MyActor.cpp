@@ -9,6 +9,9 @@
 AMyActor::AMyActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	PreviousError = 0.0f;
+	Integral = 0.0f;
 }
 
 void AMyActor::BeginPlay()
@@ -22,26 +25,51 @@ void AMyActor::Tick(float DeltaTime)
 }
 
 
-float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
+/*float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
 {
-	//float thrust_force = 0;
 
 	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
 	//float Error = target - robot_pos;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
 
 	float desired_velocity = Error;
 
 	float velocity_error = desired_velocity - current_velocity;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
 
 
 	float thrust_force = base_value + kp * velocity_error;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Thrust %s"), *FString::SanitizeFloat(-thrust_force)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Yellow, FString::Printf(TEXT("Thrust %s"), *FString::SanitizeFloat(-thrust_force)));
 
+
+	return thrust_force;
+}
+*/
+
+float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float ki, float kd, float base_value)
+{
+
+	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
+	//float Error = target - robot_pos;
+
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
+
+	float desired_velocity = Error;
+
+	float velocity_error = desired_velocity - current_velocity;
+
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
+
+	Integral =+ velocity_error * DeltaTime;
+	float Derivative = (velocity_error - PreviousError) * DeltaTime;
+
+	float thrust_force = base_value + kp * velocity_error + ki * Integral + kd * Derivative;
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Yellow, FString::Printf(TEXT("Thrust %s"), *FString::SanitizeFloat(-thrust_force)));
+	PreviousError = velocity_error;
 
 	return thrust_force;
 }
@@ -103,7 +131,7 @@ float AMyActor::Communication_delay(float DeltaTime, float target_pos, float ini
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Array Size: %d"), ErrValues.Num()));
 	}*/
 
-	if (AccumulatedTime >= 30.0f)
+	if (AccumulatedTime >= 3.0f)
 	{
 		if (TargetValues.Num() > 0)
 		{
