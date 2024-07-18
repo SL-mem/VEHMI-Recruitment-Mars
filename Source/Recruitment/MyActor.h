@@ -15,6 +15,8 @@ class RECRUITMENT_API AMyActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMyActor();
+	float AccumulatedTime=0.0f;
+	TArray<float> TargetValues;
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,6 +32,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
 	FVector RobotPosition;
 
+<<<<<<< HEAD
 	UPROPERTY(BluePrintReadWrite, EditAnywhere, Category = "Control")
 	FVector NewPos;
 
@@ -38,5 +41,20 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Control")
 	FVector FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
+=======
+	float PreviousError;
+	float Integral;
 
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float ki, float kd, float base_value);
+>>>>>>> control
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float Communication_delay(float DeltaTime, float target_pos, float initial_pos);
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float CalculateAngleForXTranslation(float DeltaTIme, float targetX, float robot_posX, float current_velocityX);
+
+	UFUNCTION(BlueprintCallable, Category = "Control")
+	float CalculateAngleForYTranslation(float DeltaTime, float targetY, float robot_posY, float current_velocityY);
 };
