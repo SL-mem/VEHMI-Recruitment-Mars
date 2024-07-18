@@ -22,29 +22,18 @@ void AMyActor::BeginPlay()
 void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-<<<<<<< HEAD
-
-
-	FollowTarget(DeltaTime);
-=======
->>>>>>> control
 }
 
 
 /*float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
 {
-<<<<<<< HEAD
 	//RobotPosition = GetActorLocation();
 	FVector Err = TargetPosition - RobotPosition;
-=======
->>>>>>> control
 
 	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
 	//float Error = target - robot_pos;
 
-<<<<<<< HEAD
 	SetActorLocation( RobotPosition + PositionCorrection*DeltaTime );
-=======
 	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
 
 	float desired_velocity = Error;
@@ -157,5 +146,4 @@ float AMyActor::Communication_delay(float DeltaTime, float target_pos, float ini
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("StoredErrValue: %s"), *FString::SanitizeFloat(StoredErrValue)));
 	return StoredTargetValue;
->>>>>>> control
 }
