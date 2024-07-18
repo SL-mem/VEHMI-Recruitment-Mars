@@ -35,11 +35,6 @@ public:
 	UPROPERTY(BluePrintReadWrite, EditAnywhere, Category = "Control")
 	FVector NewPos;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Control")
-	float kp;					// Proportional gain for the P-Controller
-
-	UFUNCTION(BlueprintCallable, Category = "Control")
-	FVector FollowTarget(float DeltaTime);   // function that will be created to implement the controller and to follow the target
 
 	float PreviousError;
 	float Integral;
