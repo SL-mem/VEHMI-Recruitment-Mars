@@ -24,31 +24,6 @@ void AMyActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-
-/*float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float base_value)
-{
-
-	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
-	//float Error = target - robot_pos;
-
-	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
-
-	float desired_velocity = Error;
-
-	float velocity_error = desired_velocity - current_velocity;
-
-	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
-	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
-
-
-	float thrust_force = base_value + kp * velocity_error;
-	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Yellow, FString::Printf(TEXT("Thrust %s"), *FString::SanitizeFloat(-thrust_force)));
-
-
-	return thrust_force;
-}
-*/
-
 float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float current_velocity, float kp, float ki, float kd, float base_value)
 {
 
