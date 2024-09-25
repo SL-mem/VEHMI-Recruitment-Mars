@@ -30,14 +30,14 @@ float AMyActor::GetThrust(float DeltaTime, float target, float robot_pos, float 
 	float Error = Communication_delay(DeltaTime, target, robot_pos) - robot_pos;
 	//float Error = target - robot_pos;
 
-	//GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Blue, FString::Printf(TEXT("error = desired_velocity: %s"), *FString::SanitizeFloat(Error)));
 
 	float desired_velocity = Error;
 
 	float velocity_error = desired_velocity - current_velocity;
 
-	//GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
-	//GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Green, FString::Printf(TEXT("current_velocity: %s"), *FString::SanitizeFloat(current_velocity)));
+	GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Black, FString::Printf(TEXT("velocity_error = : %s"), *FString::SanitizeFloat(velocity_error)));
 
 	Integral =+ velocity_error * DeltaTime;
 	float Derivative = (velocity_error - PreviousError) * DeltaTime;
