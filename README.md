@@ -38,6 +38,8 @@ Ingenuity's flight dynamics do not need to be included in the simulation but it 
 Demo Video
 
 A demonstration video showcasing the completed simulation can be seen in the main folder of the repository or a low quality gif can be found below (click to start it):
+
+
 ![ingenuity](./Official_video_Ingenuity_gif.gif)
 
 Thank you for reviewing this submission. I look forward to presenting the project during the interview.
