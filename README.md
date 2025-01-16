@@ -34,3 +34,10 @@ It would be interesting to provide winds that affect the navigation of Ingenuity
 Ingenuity's batteries are powered based on the availability of sunlight and have limited resources...
 
 Ingenuity's flight dynamics do not need to be included in the simulation but it is considered as a very interesting asset if provided.
+
+Demo Video
+
+A demonstration video showcasing the completed simulation can be seen in the main folder of the repository or a low quality gif can be found below (click to start it):
+![ingenuity](./Official_video_Ingenuity_gif.gif)
+
+Thank you for reviewing this submission. I look forward to presenting the project during the interview.
